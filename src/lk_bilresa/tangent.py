@@ -84,6 +84,14 @@ def cap(p: TangentParams) -> Part:
     return fillet(c.edges().filter_by(Axis.Z), p.cap_edge_radius)
 
 
+def shroud(p: TangentParams) -> Part:
+    """Perimeter wall behind the cap that fits over the switch frame."""
+    inner = p.frame_size + 2 * p.shroud_clearance
+    outer = Box(p.cap_width, p.cap_height, p.shroud_depth, align=DOWN)
+    ring = fillet(outer.edges().filter_by(Axis.Z), p.cap_edge_radius) - Box(inner, inner, p.shroud_depth, align=DOWN)
+    return Pos(0, 0, p.cap_back_z) * ring
+
+
 def magnet_pocket(p: TangentParams) -> Part:
     front = Plane.XY.offset(p.cap_back_z + p.cap_thickness)
     outline = front * Pos(0, p.pocket_offset_y) * SlotOverall(
@@ -94,7 +102,7 @@ def magnet_pocket(p: TangentParams) -> Part:
 
 def build(p: TangentParams = TangentParams()) -> Part:
     """Finished tangent in the installed (wall) frame."""
-    return carrier_part(p) + cap(p) - magnet_pocket(p)
+    return carrier_part(p) + cap(p) + shroud(p) - magnet_pocket(p)
 
 
 def fit_coupon(p: TangentParams = TangentParams()) -> Part:

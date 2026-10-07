@@ -27,13 +27,18 @@ class TangentParams:
     side_notch_h: float = 15.0  # TO VERIFY: relief in left/right skirt (screw clearance)
     side_notch_depth: float = 3.0  # TO VERIFY
 
-    # --- Front cap (wall-parallel, overhangs the frame rim) ---
-    cap_width: float = 49.0  # frame outside is ~50
-    cap_height: float = 52.0  # taller than the frame so the 48 mm pocket keeps ~2 mm end walls; hidden by the 70 mm remote
+    # --- Front cap (wall-parallel, covers the whole frame) ---
     cap_thickness: float = 2.6
     cap_gap: float = 0.8  # air gap between cap back and frame rim
     rim_offset: float = 0.0  # TO VERIFY: rim front minus original tangent front (neutral)
     cap_edge_radius: float = 1.0
+
+    # --- Shroud (perimeter wall from the cap back towards the wall, hides the frame) ---
+    frame_size: float = 50.0  # TO VERIFY: outside of the square switch frame
+    frame_depth: float = 9.0  # TO VERIFY: frame rim front to wall surface
+    shroud_wall: float = 1.6
+    shroud_clearance: float = 0.5  # per side, shroud inside to frame outside
+    wall_gap: float = 1.0  # shroud edge stops short of the wall (uneven paint)
 
     # --- Snap bosses (4x split tubes into the carrier holes) ---
     boss_pitch_x: float = 10.5  # TO VERIFY
@@ -83,6 +88,19 @@ class TangentParams:
         and ON (long pin) gives L_off = L + 2*p*tan(tilt).
         """
         return self.stop_len + self.stop_pitch * tan(radians(self.on_tilt_deg))
+
+    @property
+    def cap_width(self) -> float:
+        return self.frame_size + 2 * (self.shroud_clearance + self.shroud_wall)
+
+    @property
+    def cap_height(self) -> float:
+        return self.cap_width
+
+    @property
+    def shroud_depth(self) -> float:
+        """Shroud length behind the cap's back face: past the frame, short of the wall."""
+        return self.cap_gap + self.frame_depth - self.wall_gap
 
     @property
     def cap_back_z(self) -> float:

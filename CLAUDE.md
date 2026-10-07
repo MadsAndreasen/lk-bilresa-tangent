@@ -29,7 +29,7 @@ uv run python scripts/show.py out/tangent.step    # view any STEP/STL file
 - `src/lk_bilresa/tangent.py`: pure functions `Params -> Part` (Build123d algebra mode).
 - **Two coordinate frames** (this is the key idea):
   - **Carrier frame**: rocker neutral, origin at the back face. The skirt, bosses, stops and neck are built here.
-  - **Wall frame**: the carrier frame rotated by `tilt(p)` into ON about the pivot axis. `carrier_part()` tilts the rocker features and clips them at `cap_back_z`. `cap()` and `magnet_pocket()` are built directly in the wall frame, so the BILRESA face is parallel to the wall.
+  - **Wall frame**: the carrier frame rotated by `tilt(p)` into ON about the pivot axis. `carrier_part()` tilts the rocker features and clips them at `cap_back_z`. `cap()`, `shroud()` (the perimeter wall that hides the switch frame) and `magnet_pocket()` are built directly in the wall frame, so the BILRESA face is parallel to the wall.
 - Lock condition: `off_stop_len = stop_len + stop_pitch·tan(on_tilt)`, which makes both pin tips touch the base plate in ON. `test_both_stops_touch_base_in_on` guards this.
 - STEP is exported in the installed orientation. STLs go through `print_orientation()`, which flips them face-down on the bed so no supports are needed.
 - `fit_coupon()` is a small plate with only the bosses and stops. Print it first to validate the interface before printing the full tangent.

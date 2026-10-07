@@ -1,7 +1,7 @@
 import pytest
 
 from lk_bilresa.params import TangentParams
-from lk_bilresa.tangent import build, cap, carrier_part, fit_coupon, magnet_pocket, print_orientation, stops, tilt
+from lk_bilresa.tangent import build, cap, carrier_part, fit_coupon, magnet_pocket, print_orientation, shroud, stops, tilt
 
 P = TangentParams()
 
@@ -33,8 +33,17 @@ def test_pocket_floor_and_end_walls():
 
 
 def test_pocket_is_cut(tangent):
-    uncut = carrier_part(P) + cap(P)
+    uncut = carrier_part(P) + cap(P) + shroud(P)
     assert uncut.volume - tangent.volume == pytest.approx(magnet_pocket(P).volume, rel=1e-3)
+
+
+def test_shroud_covers_frame_and_clears_wall():
+    bb = shroud(P).bounding_box()
+    rim_front = P.cap_back_z - P.cap_gap
+    wall_z = rim_front - P.frame_depth
+    assert P.cap_width - 2 * P.shroud_wall > P.frame_size
+    assert bb.min.Z < rim_front  # reaches past the frame rim
+    assert bb.min.Z == pytest.approx(wall_z + P.wall_gap, abs=1e-6)
 
 
 def test_off_stop_longer_than_on_stop():
