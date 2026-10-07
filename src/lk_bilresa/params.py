@@ -37,7 +37,7 @@ class TangentParams:
 
     # --- Snap bosses (4x split tubes into the carrier holes) ---
     boss_pitch_x: float = 10.5  # TO VERIFY
-    boss_pitch_y: float = 11.5  # TO VERIFY
+    boss_pitch_y: float = 12.5  # TO VERIFY
     boss_od: float = 4.4  # TO VERIFY
     boss_id: float = 2.0
     boss_slot_w: float = 0.8
