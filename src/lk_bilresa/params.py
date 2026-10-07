@@ -51,9 +51,10 @@ class TangentParams:
     boss_lip_h: float = 1.0
     fit_clearance: float = 0.0  # added to the boss OD; negative = tighter
 
-    # --- End stops (2x pins on the vertical centreline) ---
+    # --- End stops (2x ribs on the vertical centreline; they only press on the base) ---
     stop_pitch: float = 29.0  # TO VERIFY
-    stop_d: float = 3.5  # TO VERIFY
+    stop_d: float = 3.5  # TO VERIFY: rib thickness (Y), the original pin diameter
+    stop_w: float = 10.0  # rib width along the pivot axis (X); wide = strong, same tip height everywhere
     stop_len: float = 5.0  # same as boss_height, like the original
     on_tilt_deg: float = 4.0  # TO VERIFY: rocker tilt from neutral to ON
     on_side: str = "bottom"  # edge pressed in when the light is ON

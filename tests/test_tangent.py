@@ -65,6 +65,8 @@ def test_bosses_inside_skirt():
     assert P.boss_pitch_x / 2 + r < inner_half_w
     assert P.boss_pitch_y / 2 + r < inner_half_h
     assert P.stop_pitch / 2 + P.stop_d / 2 < inner_half_h
+    assert P.stop_w / 2 < inner_half_w
+    assert P.stop_pitch / 2 - P.stop_d / 2 > P.boss_pitch_y / 2 + r  # ribs clear the bosses
 
 
 def test_coupon_and_print_orientation():

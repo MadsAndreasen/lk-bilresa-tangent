@@ -43,12 +43,15 @@ def bosses(p: TangentParams) -> Part:
     return Part() + [loc * boss for loc in GridLocations(p.boss_pitch_x, p.boss_pitch_y, 2, 2)]
 
 
+def stop_rib(p: TangentParams, length: float) -> Part:
+    """Stadium rib along the pivot axis, hanging from z=0. Its tip stays level when tilted."""
+    return extrude(SlotOverall(p.stop_w, p.stop_d), amount=-length)
+
+
 def stops(p: TangentParams) -> Part:
-    """ON-side pin at the original length; OFF-side pin lengthened to block OFF."""
-    y_off = p.tilt_sign * p.stop_pitch / 2  # ON=bottom pressed in -> OFF stop is the top pin
-    on_pin = Pos(0, -y_off, 0) * Cylinder(p.stop_d / 2, p.stop_len, align=DOWN)
-    off_pin = Pos(0, y_off, 0) * Cylinder(p.stop_d / 2, p.off_stop_len, align=DOWN)
-    return on_pin + off_pin
+    """ON-side stop at the original length; OFF-side stop lengthened to block OFF."""
+    y_off = p.tilt_sign * p.stop_pitch / 2  # ON=bottom pressed in -> OFF stop is the top one
+    return Pos(0, -y_off, 0) * stop_rib(p, p.stop_len) + Pos(0, y_off, 0) * stop_rib(p, p.off_stop_len)
 
 
 def skirt(p: TangentParams) -> Part:
