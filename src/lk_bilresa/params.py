@@ -49,7 +49,7 @@ class TangentParams:
     # --- End stops (2x pins on the vertical centreline) ---
     stop_pitch: float = 29.0  # TO VERIFY
     stop_d: float = 3.5  # TO VERIFY
-    stop_len: float = 8.0  # TO VERIFY: original pin length
+    stop_len: float = 5.0  # same as boss_height, like the original
     on_tilt_deg: float = 4.0  # TO VERIFY: rocker tilt from neutral to ON
     on_side: str = "bottom"  # edge pressed in when the light is ON
     pivot_depth: float = 8.0  # TO VERIFY: pivot axis distance behind the back face
