@@ -22,7 +22,7 @@ class TangentParams:
     width: float = 43.0  # TO VERIFY: frame opening is ~44.5
     height: float = 43.0  # TO VERIFY
     orig_face_thickness: float = 2.0  # TO VERIFY: original face plate, sets neutral front
-    skirt_depth: float = 4.0  # TO VERIFY: skirt height behind the back face
+    skirt_depth: float = 7.0  # TO VERIFY: must reach the pad, so ~ carrier height above it (est. from gap photo)
     skirt_wall: float = 1.2
     side_notch_h: float = 15.0  # TO VERIFY: relief in left/right skirt (screw clearance)
     side_notch_depth: float = 3.0  # TO VERIFY
@@ -46,7 +46,7 @@ class TangentParams:
     boss_od: float = 4.4  # TO VERIFY
     boss_id: float = 2.0
     boss_slot_w: float = 0.8
-    boss_height: float = 5.0  # TO VERIFY
+    boss_height: float = 5.7  # hole depth 6 mm (toothpick) minus 0.3 mm
     boss_lip: float = 0.2  # radial snap bead at the tip
     boss_lip_h: float = 1.0
     fit_clearance: float = 0.0  # added to the boss OD; negative = tighter
