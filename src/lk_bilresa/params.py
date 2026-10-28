@@ -22,10 +22,6 @@ class TangentParams:
     width: float = 43.0  # TO VERIFY: frame opening is ~44.5
     height: float = 43.0  # TO VERIFY
     orig_face_thickness: float = 2.0  # TO VERIFY: original face plate, sets neutral front
-    skirt_depth: float = 7.0  # TO VERIFY: must reach the pad, so ~ carrier height above it (est. from gap photo)
-    skirt_wall: float = 1.2
-    side_notch_h: float = 15.0  # TO VERIFY: relief in left/right skirt (screw clearance)
-    side_notch_depth: float = 3.0  # TO VERIFY
 
     # --- Front cap (wall-parallel, covers the whole frame) ---
     cap_thickness: float = 2.6
@@ -35,7 +31,7 @@ class TangentParams:
 
     # --- Shroud (perimeter wall from the cap back towards the wall, hides the frame) ---
     frame_size: float = 50.0  # TO VERIFY: outside of the square switch frame
-    frame_depth: float = 9.0  # TO VERIFY: frame rim front to wall surface
+    frame_depth: float = 11.0  # TO VERIFY: frame rim front to wall surface (+2 mm after fit test, shroud was short)
     shroud_wall: float = 1.6
     shroud_clearance: float = 0.5  # per side, shroud inside to frame outside
     wall_gap: float = 1.0  # shroud edge stops short of the wall (uneven paint)
@@ -56,7 +52,7 @@ class TangentParams:
     stop_d: float = 3.5  # TO VERIFY: rib thickness (Y), the original pin diameter
     stop_w: float = 10.0  # rib width along the pivot axis (X); wide = strong, same tip height everywhere
     stop_len: float = 5.0  # same as boss_height, like the original
-    on_tilt_deg: float = 4.0  # TO VERIFY: rocker tilt from neutral to ON
+    on_tilt_deg: float = 11.05  # TO VERIFY: rocker tilt neutral -> ON; 12° made the OFF stop 0.5 mm too long
     on_side: str = "bottom"  # edge pressed in when the light is ON
     pivot_depth: float = 8.0  # TO VERIFY: pivot axis distance behind the back face
 
@@ -71,6 +67,13 @@ class TangentParams:
     # --- Fit coupon ---
     coupon_thickness: float = 1.6
     coupon_margin: float = 3.0
+
+    # --- Angle gauge (coupon + long pointer arm to measure the real ON tilt) ---
+    gauge_arm_len: float = 100.0  # from plate centre; 1 deg ~ 1.7 mm of gap at the tip
+    gauge_arm_w: float = 8.0
+    gauge_tick_pitch: float = 10.0
+    gauge_tick_w: float = 0.8
+    gauge_tick_depth: float = 0.6
 
     # ---------- derived values ----------
     @property

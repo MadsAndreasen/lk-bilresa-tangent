@@ -12,7 +12,7 @@ from pathlib import Path
 from build123d import export_step, export_stl
 
 from lk_bilresa.params import TangentParams
-from lk_bilresa.tangent import build, fit_coupon, print_orientation
+from lk_bilresa.tangent import angle_gauge, build, fit_coupon, print_orientation
 
 
 def parse_overrides(pairs: list[str]) -> dict:
@@ -39,7 +39,8 @@ def main() -> None:
     export_step(tangent, str(args.out / "tangent.step"))
     export_stl(print_orientation(tangent), str(args.out / "tangent.stl"))
     export_stl(print_orientation(fit_coupon(p)), str(args.out / "coupon.stl"))
-    print(f"wrote {args.out}/tangent.step, tangent.stl, coupon.stl (OFF stop {p.off_stop_len:.2f} mm)")
+    export_stl(print_orientation(angle_gauge(p)), str(args.out / "gauge.stl"))
+    print(f"wrote {args.out}/tangent.step, tangent.stl, coupon.stl, gauge.stl (OFF stop {p.off_stop_len:.2f} mm)")
 
 
 if __name__ == "__main__":

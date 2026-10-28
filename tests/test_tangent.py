@@ -1,7 +1,7 @@
 import pytest
 
 from lk_bilresa.params import TangentParams
-from lk_bilresa.tangent import build, cap, carrier_part, fit_coupon, magnet_pocket, print_orientation, shroud, stops, tilt
+from lk_bilresa.tangent import angle_gauge, build, cap, carrier_part, fit_coupon, magnet_pocket, print_orientation, shroud, stops, tilt
 
 P = TangentParams()
 
@@ -58,9 +58,9 @@ def test_both_stops_touch_base_in_on(side):
     assert tips[0] == pytest.approx(tips[1], abs=0.02)
 
 
-def test_bosses_inside_skirt():
-    inner_half_w = P.width / 2 - P.skirt_wall
-    inner_half_h = P.height / 2 - P.skirt_wall
+def test_bosses_inside_body():
+    inner_half_w = P.width / 2
+    inner_half_h = P.height / 2
     r = (P.boss_od + P.fit_clearance) / 2 + P.boss_lip
     assert P.boss_pitch_x / 2 + r < inner_half_w
     assert P.boss_pitch_y / 2 + r < inner_half_h
@@ -73,3 +73,9 @@ def test_coupon_and_print_orientation():
     coupon = fit_coupon(P)
     assert coupon.is_valid and len(coupon.solids()) == 1
     assert print_orientation(coupon).bounding_box().min.Z == pytest.approx(0, abs=1e-6)
+
+
+def test_angle_gauge_is_one_valid_solid():
+    gauge = angle_gauge(P)
+    assert gauge.is_valid and len(gauge.solids()) == 1
+    assert print_orientation(gauge).bounding_box().min.Z == pytest.approx(0, abs=1e-6)

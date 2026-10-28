@@ -54,17 +54,6 @@ def stops(p: TangentParams) -> Part:
     return Pos(0, -y_off, 0) * stop_rib(p, p.stop_len) + Pos(0, y_off, 0) * stop_rib(p, p.off_stop_len)
 
 
-def skirt(p: TangentParams) -> Part:
-    outer = Box(p.width, p.height, p.skirt_depth, align=DOWN)
-    inner = Box(p.width - 2 * p.skirt_wall, p.height - 2 * p.skirt_wall, p.skirt_depth, align=DOWN)
-    ring = outer - inner
-    notch_z = -p.skirt_depth
-    for sx in (-1, 1):
-        x = sx * (p.width - p.skirt_wall) / 2
-        ring -= Pos(x, 0, notch_z) * Box(p.skirt_wall + 0.2, p.side_notch_h, p.side_notch_depth, align=UP)
-    return ring
-
-
 def tilt(p: TangentParams) -> Location:
     """Carrier frame -> wall frame: rotate into ON about the pivot axis."""
     d = p.pivot_depth
@@ -76,7 +65,7 @@ def carrier_part(p: TangentParams) -> Part:
     # Solid neck tall enough that, once tilted, it reaches the cap everywhere.
     neck_h = p.cap_back_z + p.height / 2 * sin(radians(p.on_tilt_deg)) + 1.0
     neck = Box(p.width, p.height, neck_h, align=UP)
-    part = tilt(p) * (neck + skirt(p) + bosses(p) + stops(p))
+    part = tilt(p) * (neck + bosses(p) + stops(p))
     big = 4 * max(p.cap_width, p.cap_height, p.off_stop_len + p.pivot_depth)
     keep = Pos(0, 0, p.cap_back_z) * Box(big, big, big, align=DOWN)
     return part & keep
@@ -114,6 +103,30 @@ def fit_coupon(p: TangentParams = TangentParams()) -> Part:
     h = p.stop_pitch + p.stop_d + 2 * p.coupon_margin
     plate = Box(w, h, p.coupon_thickness, align=UP)
     return plate + bosses(p) + stops(p)
+
+
+def angle_gauge(p: TangentParams = TangentParams()) -> Part:
+    """Coupon with both ribs at the original length plus a long in-plane pointer arm.
+
+    The arm points to the side that swings away from the wall in ON, so it never
+    blocks the rocker. Hold a ruler against the wall: gap growth along the arm
+    gives the tilt, angle = atan(dgap / dy). Ticks mark every gauge_tick_pitch from the centre.
+    """
+    w = p.boss_pitch_x + p.boss_od + 2 * p.coupon_margin
+    h = p.stop_pitch + p.stop_d + 2 * p.coupon_margin
+    t = p.coupon_thickness
+    y_rib = p.stop_pitch / 2
+    ribs = Pos(0, -y_rib, 0) * stop_rib(p, p.stop_len) + Pos(0, y_rib, 0) * stop_rib(p, p.stop_len)
+    plate = Box(w, h, t, align=UP)
+    arm = Pos(0, p.gauge_arm_len / 2, 0) * Box(p.gauge_arm_w, p.gauge_arm_len, t, align=UP)
+    n_ticks = int(p.gauge_arm_len // p.gauge_tick_pitch)
+    for i in range(1, n_ticks + 1):
+        tick = Pos(0, i * p.gauge_tick_pitch, t - p.gauge_tick_depth) * Box(
+            p.gauge_arm_w, p.gauge_tick_w, p.gauge_tick_depth, align=UP
+        )
+        arm -= tick
+    arm = Rot(Z=0 if p.tilt_sign > 0 else 180) * arm
+    return plate + arm + bosses(p) + ribs
 
 
 def print_orientation(part: Part) -> Part:
